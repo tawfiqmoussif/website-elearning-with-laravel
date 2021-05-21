@@ -1,0 +1,67 @@
+1- construire theme 
+2- CRUD :
+        construire 3 page : index.blade.php
+                            create.blade.php
+                            edit.blade.php
+        construire migration + model : php artisan make:model Post -m
+        construire controller        : php artisan make:controller PostController
+        dans chaque controller 6 methode :
+                                         public function index()
+                                         public function store(postRequest $request)
+                                         public function create()
+                                         public function edit($id)
+                                         public function update(postRequest $request,$id)
+                                         public function destroy(Request $request,$id)
+
+3- construire un system de validation : php artisan make:request postRequest
+4- donner les roles :
+                         super_admin 
+                         admin
+                         editor
+                         simple_user
+           construire middleware pour securiser chaque espace : php artisan make:middleware CheckRole
+           ajouter la middelware in kernel.php
+5-system de polycies : php artisan make:policy PostPolicy --model=Post
+               fhad lpolicy kan3tiw les droit 
+                            create kan3tiwha lkolchi 
+                            delete w update w edit kan3tiwhom ghi lmol lpost
+    => khas liyiw lmodel m3a lpolicy : kanmchiw : app\Providers\AuthServiceProvider
+                               'App\Post' =>'App\Policies\PostPolicy'
+                               wkanzido f edit hadi bach maymknch y acceder wakha yktb url 
+                               $this->authorize('update',$post);
+                               wkanzido f delete hadi bach maymknch y acceder wakha yktb url 
+                               $this->authorize('delete',$post);
+    => kayna fct smiytha before($user,$ability  ) had lmethod kadar 9bl kolchi f lpolicy
+                 momkin biha ntestiw ila kan super admin n3tiwh des droits ktar
+6-system de policy can 
+           la philpsophie dyalo katgolik matalaa l admin mam79och ymodefier donc makhasch lbutton d update tbanlo fl7way li mam79och ymodefyihom
+           => @can('update',$post)
+           //hna lbuttona 
+              @endcan
+
+7-Factory and seed
+php artisan make:seeder UsersTableSeeder
+        php artisan make:factory PostFactory --model=Post   // hadi bach tswab factory liee lmodel post 
+                                                            // bach t ajouter manuell les post
+        mnba3d katmchi l seeds/DatabaseSeeder.php wkat3mr lm3lomat li bghiti
+        php artisan db:seed //hadi bach dok lm3lomat kadhlhom lDB
+        php artisan db:seed --class=RolesTableSeeder
+        if not march (git)  : composer dump-autoload
+/***************************************** last etape ******************************************/
+https://app.netlify.com
+
+
+
+8- reset password
+configurer .env 
+php artisan config:cache
+
+9- notification 
+php artisan notifications:table
+php artisan migrate
+php artisan make:notification DemandeNotification
+
+10- broadcast
+composer require beyondcode/laravel-websockets
+add App\Providers\BroadcastServiceProvider in config/app.php
+composer require pusher/pusher-php-server "~4.0"
